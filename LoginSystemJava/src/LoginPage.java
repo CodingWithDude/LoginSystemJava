@@ -13,26 +13,25 @@ public class LoginPage implements ActionListener {
     JPasswordField userPasswordField = new JPasswordField();
     JLabel userIDLabel = new JLabel("User ID");
     JLabel userPasswordLabel = new JLabel("Password");
-    JLabel messageLabel = new JLabel("");
+    JLabel messageLabel = new JLabel("", SwingConstants.CENTER);
     HashMap<String, String> loginInfo = new HashMap<String, String>();
 
-    LoginPage(HashMap<String,String> loginInfoOriginal){
+    LoginPage(HashMap<String, String> loginInfoOriginal) {
         this.loginInfo = loginInfoOriginal;
 
-        userIDLabel.setBounds(50,100,75,25);
-        userPasswordLabel.setBounds(50,150,75,25);
+        userIDLabel.setBounds(50, 100, 75, 25);
+        userPasswordLabel.setBounds(50, 150, 75, 25);
 
-        messageLabel.setBounds(125,250,250,35);
+        messageLabel.setBounds(0, 250, 420, 35);
         messageLabel.setFont(new Font(null, Font.ITALIC, 25));
 
-        userIDField.setBounds(125,100,200,25);
-        userPasswordField.setBounds(125,150,200,25);
+        userIDField.setBounds(125, 100, 200, 25);
+        userPasswordField.setBounds(125, 150, 200, 25);
 
-        loginButton.setBounds(125,200,100,25);
-        loginButton.addActionListener(this);
+        loginButton.setBounds(125, 200, 100, 25);
         loginButton.setFocusable(false);
 
-        resetButton.setBounds(225,200,100,25);
+        resetButton.setBounds(225, 200, 100, 25);
         resetButton.addActionListener(this);
         resetButton.setFocusable(false);
 
@@ -45,31 +44,43 @@ public class LoginPage implements ActionListener {
         frame.add(resetButton);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Login Page");
-        frame.setSize(420,420);
+        frame.setSize(420, 420);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setVisible(true);
+
+
+    }
+
+    public void validateLogin(ActionEvent e) {
+        if (e.getSource() == loginButton) {
+            String userID = userIDField.getText();
+            String userPassword = String.valueOf(userPasswordField.getPassword());
+
+            if (loginInfo.containsKey(userID)) {
+                if (loginInfo.get(userID).equals(userPassword)) {
+                    messageLabel.setForeground(Color.green);
+                    messageLabel.setText("Login Successful");
+                    frame.dispose();
+                    WelcomePage welcomePage = new WelcomePage(userID);
+                }
+            } else {
+                messageLabel.setForeground(Color.red);
+                messageLabel.setText("Invalid UserID or Password");
+            }
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if(e.getSource() == resetButton){
+        if (e.getSource() == resetButton) {
             userIDField.setText("");
             userPasswordField.setText("");
         }
 
-        if(e.getSource() == loginButton){
-            String userID = userIDField.getText();
-            String userPassword = String.valueOf(userPasswordField.getPassword());
+        validateLogin(e);
 
-            if(loginInfo.containsKey(userID)){
-                if(loginInfo.get(userID).equals(userPassword)){
-                    messageLabel.setForeground(Color.green);
-                    messageLabel.setText("Login Successful");
-                    WelcomePage welcomePage = new WelcomePage();
-                }
-            }
-        }
     }
+
 }
